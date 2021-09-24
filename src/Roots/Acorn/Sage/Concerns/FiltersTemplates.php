@@ -37,7 +37,16 @@ trait FiltersTemplates
             return apply_filters("sage/template/{$class}/data", $data, $view, $file);
         }, []);
 
-        $this->app['sage.view'] = $this->view->exists($view) ? $view : $file;
+        $view = $this->view->exists($view) ? $view : $file;
+
+        /**
+         * Filters the view that is being presented.
+         *
+         * @param string $view      View that is currently being used
+         * @param string $file      File that is being used
+         * @param array $data       Data that is passed to the view
+         */
+        $this->app['sage.view'] = apply_filters("sage/template/view", $view, $file, $data);
         $this->app['sage.data'] = $data;
 
         return get_template_directory() . '/index.php';
